@@ -6,7 +6,7 @@ Implements data validation for Data Table assets
 Data tables are useful to drive your behaviour via tables, and Unreal supports
 importing via CSV files for iteration. This can improve your workflow if you
 expect many values changes to be required over the course of your project. See
-[Unreal's documentation](https://docs.unrealengine.com/5.3/en-US/data-driven-gameplay-elements-in-unreal-engine/)
+[Unreal's documentation](https://docs.unrealengine.com/latest/en-US/data-driven-gameplay-elements-in-unreal-engine/)
 for more information.
 
 Each table has a specified row type that it must use for all rows, with

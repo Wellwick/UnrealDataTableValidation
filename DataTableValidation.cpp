@@ -7,7 +7,7 @@
 #include "DataTableValidation.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_GAME_MODULE(FMapCheckAutomation, DataTableValidation);
+IMPLEMENT_GAME_MODULE(FDataTableValidation, DataTableValidation);
 
 DEFINE_LOG_CATEGORY(LogDataTableValidation)
 

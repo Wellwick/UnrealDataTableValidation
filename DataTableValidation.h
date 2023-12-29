@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleInterface.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogMapCheckAutomation, All, All)
+DECLARE_LOG_CATEGORY_EXTERN(LogDataTableValidation, All, All)
 
 class FDataTableValidation final : public IModuleInterface
 {
