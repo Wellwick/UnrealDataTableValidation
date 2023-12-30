@@ -7,7 +7,9 @@
 
 #include "DataTableValidator.h"
 
+#include "DataRowValidation.h"
 #include "Engine/DataTable.h"
+#include "Misc/DataValidation.h"
 
 bool UDataTableValidator::CanValidateAsset_Implementation(UObject* InAsset) const
 {
@@ -45,10 +47,38 @@ EDataValidationResult UDataTableValidator::ValidateLoadedAsset_Implementation(UO
         const FTableRowBase* Row = TableRows[Index];
         if (Row == nullptr)
         {
-            AssetFails(InAsset, FText::Format(INVTEXT("Row at {0} index does not exist!"), Index), ValidationErrors);
+            AssetFails(InAsset, FText::Format(INVTEXT("Row {0} does not exist!"), Index + 1), ValidationErrors);
             Result = CombineDataValidationResults(Result, EDataValidationResult::Invalid);
             continue;
         }
+
+        // Check if the struct implements DataRowValidation
+        const IDataRowValidation* DataRowValidation = dynamic_cast<const IDataRowValidation*>(Row);
+        if (DataRowValidation != nullptr)
+        {
+            FDataValidationContext Context;
+            DataRowValidation->IsDataRowValid(Context);
+
+            TArray<FText> Warnings;
+            TArray<FText> Errors;
+            Context.SplitIssues(Warnings, Errors);
+
+            for (const FText& Warning : Warnings)
+            {
+                AssetWarning(InAsset, FText::Format(INVTEXT("Row {0}: {1}"), Index + 1, Warning));
+            }
+
+            for (const FText& Error : Errors)
+            {
+                AssetFails(InAsset, FText::Format(INVTEXT("Row {0}: {1}"), Index + 1, Error), ValidationErrors);
+                Result = CombineDataValidationResults(Result, EDataValidationResult::Invalid);
+            }
+        }
+    }
+
+    if (Result == EDataValidationResult::Valid)
+    {
+        AssetPasses(InAsset);
     }
 
     return Result;
